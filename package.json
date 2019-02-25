@@ -20,6 +20,8 @@
     },
     "homepage": "",
     "dependencies": {
+        "@material/button": "^0.44.1",
+        "@material/ripple": "^0.44.1",
         "normalize.css": "^8.0.0"
     },
     "devDependencies": {

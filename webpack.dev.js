@@ -45,10 +45,10 @@ module.exports = {
                         options: {
                             outputStyle: 'expanded',
                             sourceMap: true,
-                            sourceMapContents: true
-                        }
+                            sourceMapContents: true,
+							includePaths: ['./node_modules']
+						}
                     }
-                    // Please note we are not running postcss here
                 ]
             }
             ,
