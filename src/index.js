@@ -18,6 +18,7 @@ const user = {
     validZip: false,
     firstName: '',
     lastName: '',
+    address: '',
     email: ''
 };
 
