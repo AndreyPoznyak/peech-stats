@@ -21,6 +21,7 @@
     "homepage": "",
     "dependencies": {
         "@material/button": "^0.44.1",
+        "@material/dialog": "^0.44.1",
         "@material/ripple": "^0.44.1",
         "@material/textfield": "^0.44.1",
         "firebase": "^5.8.4",

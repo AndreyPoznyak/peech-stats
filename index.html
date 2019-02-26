@@ -18,7 +18,7 @@
 </section>
 <section class="zip-form">
     <div class="mdc-text-field zipcode">
-        <input type="text" class="mdc-text-field__input" id="zipcode-input" name="zipcode" required minlength="4" maxlength="8">
+        <input type="number" class="mdc-text-field__input" id="zipcode-input" name="zipcode" required minlength="4" maxlength="8">
         <label class="mdc-floating-label" for="zipcode-input">Zip code</label>
         <div class="mdc-line-ripple"></div>
     </div>
@@ -28,5 +28,66 @@
         </button>
     </div>
 </section>
+
+<section class="customer-info hidden">
+    <div class="mdc-text-field email">
+        <input type="email" class="mdc-text-field__input" id="email-input" name="email" required>
+        <label class="mdc-floating-label" for="email-input">Email address</label>
+        <div class="mdc-line-ripple"></div>
+    </div>
+    <div class="mdc-text-field firstname">
+        <input type="text" class="mdc-text-field__input" id="firstname-input" name="firstname" required minlength="4" maxlength="20">
+        <label class="mdc-floating-label" for="firstname-input">First Name</label>
+        <div class="mdc-line-ripple"></div>
+    </div>
+    <div class="button-container">
+        <button type="button" class="mdc-button mdc-button--raised validate">
+            Submit
+        </button>
+    </div>
+</section>
+
+<div class="mdc-dialog success-dialog"
+     role="alertdialog"
+     aria-modal="true"
+     aria-labelledby="my-dialog-title"
+     aria-describedby="my-dialog-content">
+    <div class="mdc-dialog__container">
+        <div class="mdc-dialog__surface">
+            <h2 class="mdc-dialog__title" id="my-dialog-title">Success</h2>
+            <div class="mdc-dialog__content" id="my-dialog-content">
+                Your ZIP code is amazing
+            </div>
+            <footer class="mdc-dialog__actions">
+                <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="yes">
+                    <span class="mdc-button__label">Ok</span>
+                </button>
+            </footer>
+        </div>
+    </div>
+    <div class="mdc-dialog__scrim"></div>
+</div>
+
+<div class="mdc-dialog failure-dialog"
+     role="alertdialog"
+     aria-modal="true"
+     aria-labelledby="my-dialog-title"
+     aria-describedby="my-dialog-content">
+    <div class="mdc-dialog__container">
+        <div class="mdc-dialog__surface">
+            <h2 class="mdc-dialog__title">Not found</h2>
+            <div class="mdc-dialog__content">
+                Your ZIP code is not eligible for this stuff
+            </div>
+            <footer class="mdc-dialog__actions">
+                <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="yes">
+                    <span class="mdc-button__label">Ok</span>
+                </button>
+            </footer>
+        </div>
+    </div>
+    <div class="mdc-dialog__scrim"></div>
+</div>
+
 </body>
 </html>
