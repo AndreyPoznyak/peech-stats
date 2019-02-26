@@ -7,6 +7,8 @@ import {MDCDialog} from '@material/dialog';
 
 const codes = require('../data/zipcodes').zip;
 
+import * as firebase from './firebase/firebase.js';
+
 const elements = {
     codeInput: null,
     validateButton: null,
@@ -66,6 +68,12 @@ const onValidateButtonClicked = () => {
 
 document.addEventListener("DOMContentLoaded", () => {
 	setupComponents();
+
+	firebase.launch();
+
+	firebase.saveEligibleDealerInfo({
+		email: 'test'
+	});
 
     elements.validateButton.addEventListener('click', onValidateButtonClicked)
 });
