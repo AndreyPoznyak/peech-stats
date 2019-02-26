@@ -14,6 +14,13 @@ const elements = {
     failureDialog: null
 };
 
+const user = {
+    validZip: false,
+    firstName: '',
+    lastName: '',
+    email: ''
+};
+
 const setupComponents = () => {
     elements.codeInput = document.querySelector('#zipcode-input');
     elements.validateButton = document.querySelector('.validate');
@@ -29,15 +36,30 @@ const validate = value => {
     return codes.indexOf(parseInt(value, 10)) > -1;
 };
 
+const showFirstStep = () => {};
+
+const showSecondStep = () => {
+    document.querySelector('.zip-form').classList.add('hidden');
+    document.querySelector('.customer-info').classList.remove('hidden');
+};
+
 const onValidateButtonClicked = () => {
     const enteredZip = elements.codeInput.value;
 
     if (validate(enteredZip)) {
         console.log('Eligible zip');
-        elements.successDialog.open()
+        user.validZip = true;
+        elements.successDialog.open();
+        elements.successDialog.listen('MDCDialog:closing', data => {
+            showSecondStep();
+        });
     } else {
-        console.log('Not eligible zip')
-        elements.failureDialog.open()
+        console.log('Not eligible zip');
+        user.validZip = false;
+        elements.failureDialog.open();
+        elements.failureDialog.listen('MDCDialog:closing', data => {
+            showSecondStep();
+        });
     }
 };
 
