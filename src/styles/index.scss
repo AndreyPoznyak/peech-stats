@@ -1,5 +1,4 @@
 @import "@material/button/mdc-button";
-@import "@material/textfield/mdc-text-field";
 @import "@material/dialog/mdc-dialog";
 
 html, body {
@@ -23,12 +22,6 @@ html, body {
     width: 150px;
     height: 150px;
     padding-top: 80px;
-}
-
-.zipcode {
-    display: block;
-    width: 300px;
-    margin: 20px auto;
 }
 
 .button-container {

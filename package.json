@@ -1,5 +1,5 @@
 {
-    "name": "zip-validation",
+    "name": "peech-stats",
     "version": "0.0.1",
     "description": "",
     "main": "index.js",
@@ -13,8 +13,8 @@
         "url": ""
     },
     "keywords": [],
-    "author": "Chamberlain Group",
-    "license": "ISC",
+    "author": "Andrey Poznyak",
+    "license": "UNLICENSED",
     "bugs": {
         "url": ""
     },
@@ -23,8 +23,6 @@
         "@material/button": "^0.44.1",
         "@material/dialog": "^0.44.1",
         "@material/ripple": "^0.44.1",
-        "@material/textfield": "^0.44.1",
-        "firebase": "^5.8.4",
         "normalize.css": "^8.0.0"
     },
     "devDependencies": {
