@@ -19,6 +19,8 @@ const setupComponents = () => {
         usersPositiveLabel: document.querySelector('.users-positive-amount'),
         usersNegativeLabel: document.querySelector('.users-negative-amount'),
         usersVotedLabel: document.querySelector('.users-voted-amount'),
+        usersFbLabel: document.querySelector('.users-fb-amount'),
+        usersGmailLabel: document.querySelector('.users-gmail-amount'),
 	};
 
     new MDCRipple(elements.getDataButton);
@@ -65,9 +67,15 @@ const populateUsersValues = allUsers => {
     const negativeUsers = users.filter(user => user.offerSecondStep > user.offerFirstStep);
     const votedUsers = users.filter(user => user.offerSecondStep !== user.offerFirstStep);
 
+    const fbUsers = users.filter(user => !!user.facebookId);
+    const gmailUsers = users.filter(user => !!user.googleId);
+
     elements.usersVotedLabel.innerHTML = `${votedUsers.length} / ${users.length} = ${getPercentage(votedUsers.length, users.length)}%`;
     elements.usersPositiveLabel.innerHTML = `${positiveUsers.length} / ${votedUsers.length} = ${getPercentage(positiveUsers.length, votedUsers.length)}%`;
     elements.usersNegativeLabel.innerHTML = `${negativeUsers.length} / ${votedUsers.length} = ${getPercentage(negativeUsers.length, votedUsers.length)}%`;
+
+    elements.usersFbLabel.innerHTML = `${fbUsers.length} / ${users.length}`;
+    elements.usersGmailLabel.innerHTML = `${gmailUsers.length} / ${users.length}`;
 };
 
 const showError = () => console.log('Sorry, request failed');
