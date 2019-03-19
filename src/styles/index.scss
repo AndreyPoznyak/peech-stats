@@ -3,52 +3,52 @@
 @import "@material/linear-progress/mdc-linear-progress";
 
 html, body {
-    height: 100%;
-    width: 100%;
-    font-size: 100%;
-    font-family: 'Roboto', sans-serif;
-    text-align: center;
-    font-weight: lighter;
+  width: 100%;
+  font-size: 100%;
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
+  font-weight: lighter;
+  padding-bottom: 10px;
 }
 
 section {
-    margin: 10px 0 10px 0;
+  margin: 10px 0 10px 0;
 }
 
 .hidden {
-    display: none;
+  display: none;
 }
 
 .header {
-    text-align: center;
+  text-align: center;
 }
 
 .logo {
-    width: 150px;
-    height: 150px;
-    padding-top: 80px;
+  width: 150px;
+  height: 150px;
+  padding-top: 80px;
 }
 
 .button-container {
-    display: flex;
-    //justify-content: flex-end;
-    width: 90%;
-    margin: auto;
+  display: flex;
+  //justify-content: flex-end;
+  width: 90%;
+  margin: auto;
 }
 
 .button-container, .info-container {
-    width: 90%;
-    margin: auto;
+  width: 90%;
+  margin: auto;
 }
 
 .info-container p {
-    text-align: left;
+  text-align: left;
 }
 
 .info-container span {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .button-container button {
-    margin: 3px;
+  margin: 3px;
 }

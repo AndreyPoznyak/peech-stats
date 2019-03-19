@@ -11,6 +11,7 @@ let elements = {};
 const setupComponents = () => {
     elements = {
         progressBar: new MDCLinearProgress(document.querySelector('.mdc-linear-progress')),
+
         getDataButton: document.querySelector('.get-stats-data'),
         getUsersDataButton: document.querySelector('.get-users-data'),
         usersAmountLabel: document.querySelector('.users-amount'),
@@ -39,7 +40,8 @@ const setupComponents = () => {
     new MDCRipple(elements.getDataButton);
     new MDCRipple(elements.getUsersDataButton);
 
-    elements.determinate = false;
+    elements.progressBar.determinate = false;
+	elements.progressBar.close();
 };
 
 const notUsers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 25, 34, 37, 40, 43, 65];
