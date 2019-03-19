@@ -17,6 +17,9 @@ const setupComponents = () => {
         users1DayLabel: document.querySelector('.users-retention-one-amount'),
         users7DaysLabel: document.querySelector('.users-retention-seven-amount'),
         users30DaysLabel: document.querySelector('.users-retention-thirty-amount'),
+        users1DayAdded0Label: document.querySelector('.users-retention-one-add-one-amount'),
+        users7DaysAdded0Label: document.querySelector('.users-retention-seven-add-one-amount'),
+        users30DaysAdded0Label: document.querySelector('.users-retention-thirty-add-one-amount'),
         usersActiveLabel: document.querySelector('.users-active-amount'),
         usersTenVoicedLabel: document.querySelector('.users-ten-voiced-amount'),
         usersTenArticlesLabel: document.querySelector('.users-ten-articles-amount'),
@@ -52,23 +55,36 @@ const populateStatsValues = allUsers => {
 	const days1Ago = new Date().setDate(today.getDate() - 1);
 	const msPerDay = 1000 * 60 * 60 * 24;
 
-	const activeUsers = users.filter(user => new Date(user.lastArticleAddDate).getTime() > days30Ago);
+	const activeUsers = users.filter(user => new Date(user.lastAddedArticleDate).getTime() > days30Ago);
+	
 	const days1AgoUsers = users.filter(user => new Date(user.registrationDate).getTime() <= days1Ago);
 	const days7AgoUsers = users.filter(user => new Date(user.registrationDate).getTime() <= days7Ago);
 	const days30AgoUsers = users.filter(user => new Date(user.registrationDate).getTime() <= days30Ago);
+
 	const voicedUsers = users.filter(user => user.voicedArticlesCount > 0);
 	const voicedTenUsers = users.filter(user => user.voicedArticlesCount > 9);
 	const articlesTenUsers = users.filter(user => user.articlesCount > 9);
 	const artcilesAddedUsers = users.filter(user => user.articlesCount > 0);
-	const retention1Users = days1AgoUsers.filter(user => ( new Date(user.lastArticleAddDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 1);
-	const retention7Users = days7AgoUsers.filter(user => ( new Date(user.lastArticleAddDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 7);
-	const retention30Users = days30AgoUsers.filter(user => ( new Date(user.lastArticleAddDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 30);
+
+	const retention1Users = days1AgoUsers.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 1);
+	const retention7Users = days7AgoUsers.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 7);
+	const retention30Users = days30AgoUsers.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 30);
+
+    const retention1Added0Users = days1AgoUsers.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 1);
+    const retention7Added0Users = days7AgoUsers.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 7);
+    const retention30Added0Users = days30AgoUsers.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 30);
 
 	elements.usersAmountLabel.innerHTML = users.length;
 	elements.usersActiveLabel.innerHTML = activeUsers.length;
+
 	elements.users1DayLabel.innerHTML = `${retention1Users.length} / ${days1AgoUsers.length} = ${getPercentage(retention1Users.length, days1AgoUsers.length)}%`;
 	elements.users7DaysLabel.innerHTML = `${retention7Users.length} / ${days7AgoUsers.length} = ${getPercentage(retention7Users.length, days7AgoUsers.length)}%`;
 	elements.users30DaysLabel.innerHTML = `${retention30Users.length} / ${days30AgoUsers.length} = ${getPercentage(retention30Users.length, days30AgoUsers.length)}%`;
+
+    elements.users1DayAdded0Label.innerHTML = `${retention1Users.length} / ${days1AgoUsers.length} = ${getPercentage(retention1Users.length, days1AgoUsers.length)}%`;
+    elements.users7DaysAdded0Label.innerHTML = `${retention7Users.length} / ${days7AgoUsers.length} = ${getPercentage(retention7Users.length, days7AgoUsers.length)}%`;
+    elements.users30DaysAdded0Label.innerHTML = `${retention30Users.length} / ${days30AgoUsers.length} = ${getPercentage(retention30Users.length, days30AgoUsers.length)}%`;
+
 	elements.usersTenVoicedLabel.innerHTML = voicedTenUsers.length;
 	elements.usersVoicedLabel.innerHTML = `${voicedUsers.length} / ${artcilesAddedUsers.length} = ${getPercentage(voicedUsers.length, artcilesAddedUsers.length)}% (${voicedUsers.length} / ${users.length} = ${getPercentage(voicedUsers.length, users.length)}%)`;
 	elements.usersAddedArticlesLabel.innerHTML = `${artcilesAddedUsers.length} / ${users.length} = ${getPercentage(artcilesAddedUsers.length, users.length)}%`;
