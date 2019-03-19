@@ -14,17 +14,21 @@ const setupComponents = () => {
         getDataButton: document.querySelector('.get-stats-data'),
         getUsersDataButton: document.querySelector('.get-users-data'),
         usersAmountLabel: document.querySelector('.users-amount'),
+
         users1DayLabel: document.querySelector('.users-retention-one-amount'),
         users7DaysLabel: document.querySelector('.users-retention-seven-amount'),
         users30DaysLabel: document.querySelector('.users-retention-thirty-amount'),
+
         users1DayAdded0Label: document.querySelector('.users-retention-one-add-one-amount'),
         users7DaysAdded0Label: document.querySelector('.users-retention-seven-add-one-amount'),
         users30DaysAdded0Label: document.querySelector('.users-retention-thirty-add-one-amount'),
+
         usersActiveLabel: document.querySelector('.users-active-amount'),
         usersTenVoicedLabel: document.querySelector('.users-ten-voiced-amount'),
         usersTenArticlesLabel: document.querySelector('.users-ten-articles-amount'),
         usersVoicedLabel: document.querySelector('.users-voiced-amount'),
         usersAddedArticlesLabel: document.querySelector('.users-articles-amount'),
+        
         usersPositiveLabel: document.querySelector('.users-positive-amount'),
         usersNegativeLabel: document.querySelector('.users-negative-amount'),
         usersVotedLabel: document.querySelector('.users-voted-amount'),
@@ -56,7 +60,7 @@ const populateStatsValues = allUsers => {
 	const msPerDay = 1000 * 60 * 60 * 24;
 
 	const activeUsers = users.filter(user => new Date(user.lastAddedArticleDate).getTime() > days30Ago);
-	
+
 	const days1AgoUsers = users.filter(user => new Date(user.registrationDate).getTime() <= days1Ago);
 	const days7AgoUsers = users.filter(user => new Date(user.registrationDate).getTime() <= days7Ago);
 	const days30AgoUsers = users.filter(user => new Date(user.registrationDate).getTime() <= days30Ago);
