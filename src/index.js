@@ -6,6 +6,12 @@ import {MDCLinearProgress} from '@material/linear-progress';
 
 const apiBaseURL = 'https://us-central1-voiceservice-217021.cloudfunctions.net';
 
+const today = new Date();
+const days30Ago = today.setDate(today.getDate() - 30);
+const days7Ago = today.setDate(today.getDate() - 7);
+const days1Ago = today.setDate(today.getDate() - 1);
+const msPerDay = 1000 * 60 * 60 * 24;
+
 let elements = {};
 
 const setupComponents = () => {
@@ -15,6 +21,9 @@ const setupComponents = () => {
         getDataButton: document.querySelector('.get-stats-data'),
         getUsersDataButton: document.querySelector('.get-users-data'),
         usersAmountLabel: document.querySelector('.users-amount'),
+
+        usersAddedStraightAmountLabel: document.querySelector('.users-added-first-amount'),
+        usersVoicedStraightAmountLabel: document.querySelector('.users-voiced-first-amount'),
 
         users1DayLabel: document.querySelector('.users-retention-one-amount'),
         users7DaysLabel: document.querySelector('.users-retention-seven-amount'),
@@ -52,51 +61,62 @@ const fetchData = () => fetch(`${apiBaseURL}/stats`).then(response => response.j
 const fetchUsers = () => fetch(`${apiBaseURL}/users`).then(response => response.json());
 
 const getPercentage = (part, amount) => Math.round(100 * (part / amount));
+const getPercentLabel = (partList, fullList) => `${partList.length} / ${fullList.length} = ${getPercentage(partList.length, fullList.length)}%`;
 
 const populateStatsValues = allUsers => {
 	const users = filterNotRealUsers(allUsers);
-	const today = new Date();
-	const days30Ago = new Date().setDate(today.getDate() - 30);
-	const days7Ago = new Date().setDate(today.getDate() - 7);
-	const days1Ago = new Date().setDate(today.getDate() - 1);
-	const msPerDay = 1000 * 60 * 60 * 24;
 
 	const activeUsers = users.filter(user => new Date(user.lastAddedArticleDate).getTime() > days30Ago);
+
+	const voicedUsers = users.filter(user => user.voicedArticlesCount > 0);
+	const voicedTenUsers = users.filter(user => user.voicedArticlesCount > 9);
+	const articlesTenUsers = users.filter(user => user.articlesCount > 9);
+	const articlesAddedUsers = users.filter(user => user.articlesCount > 0);
+
+	elements.usersAmountLabel.innerHTML = users.length;
+	elements.usersActiveLabel.innerHTML = activeUsers.length;
+
+	elements.usersVoicedLabel.innerHTML = `${getPercentLabel(voicedUsers, articlesAddedUsers)} (${getPercentLabel(voicedUsers, users)})`;
+	elements.usersAddedArticlesLabel.innerHTML = getPercentLabel(articlesAddedUsers, users);
+
+	elements.usersTenArticlesLabel.innerHTML = articlesTenUsers.length;
+	elements.usersTenVoicedLabel.innerHTML = voicedTenUsers.length;
+
+	populateRetention(users);
+
+    elements.progressBar.close();
+};
+
+const populateRetention = users => {
+	const added0Users = users.filter(user => new Date(user.registrationDate).getTime() - new Date(user.firstAddedArticleDate).getTime() < msPerDay);
+	const voiced0Users = users.filter(user => new Date(user.registrationDate).getTime() - new Date(user.firstVoicedArticleDate).getTime() < msPerDay);
 
 	const days1AgoUsers = users.filter(user => new Date(user.registrationDate).getTime() <= days1Ago);
 	const days7AgoUsers = users.filter(user => new Date(user.registrationDate).getTime() <= days7Ago);
 	const days30AgoUsers = users.filter(user => new Date(user.registrationDate).getTime() <= days30Ago);
 
-	const voicedUsers = users.filter(user => user.voicedArticlesCount > 0);
-	const voicedTenUsers = users.filter(user => user.voicedArticlesCount > 9);
-	const articlesTenUsers = users.filter(user => user.articlesCount > 9);
-	const artcilesAddedUsers = users.filter(user => user.articlesCount > 0);
+	const days1AgoAdded0Users = added0Users.filter(user => new Date(user.registrationDate).getTime() <= days1Ago);
+	const days7AgoAdded0Users = added0Users.filter(user => new Date(user.registrationDate).getTime() <= days7Ago);
+	const days30AgoAdded0Users = added0Users.filter(user => new Date(user.registrationDate).getTime() <= days30Ago);
 
 	const retention1Users = days1AgoUsers.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 1);
 	const retention7Users = days7AgoUsers.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 7);
 	const retention30Users = days30AgoUsers.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 30);
 
-    const retention1Added0Users = days1AgoUsers.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 1);
-    const retention7Added0Users = days7AgoUsers.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 7);
-    const retention30Added0Users = days30AgoUsers.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 30);
+	const retention1Added0Users = days1AgoAdded0Users.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 1);
+	const retention7Added0Users = days7AgoAdded0Users.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 7);
+	const retention30Added0Users = days30AgoAdded0Users.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 30);
 
-	elements.usersAmountLabel.innerHTML = users.length;
-	elements.usersActiveLabel.innerHTML = activeUsers.length;
+	elements.usersAddedStraightAmountLabel.innerHTML = added0Users.length;
+	elements.usersVoicedStraightAmountLabel.innerHTML = voiced0Users.length;
 
-	elements.users1DayLabel.innerHTML = `${retention1Users.length} / ${days1AgoUsers.length} = ${getPercentage(retention1Users.length, days1AgoUsers.length)}%`;
-	elements.users7DaysLabel.innerHTML = `${retention7Users.length} / ${days7AgoUsers.length} = ${getPercentage(retention7Users.length, days7AgoUsers.length)}%`;
-	elements.users30DaysLabel.innerHTML = `${retention30Users.length} / ${days30AgoUsers.length} = ${getPercentage(retention30Users.length, days30AgoUsers.length)}%`;
+	elements.users1DayLabel.innerHTML = getPercentLabel(retention1Users, days1AgoUsers);
+	elements.users7DaysLabel.innerHTML = getPercentLabel(retention7Users, days7AgoUsers);
+	elements.users30DaysLabel.innerHTML = getPercentLabel(retention30Users, days30AgoUsers);
 
-    elements.users1DayAdded0Label.innerHTML = `${retention1Users.length} / ${days1AgoUsers.length} = ${getPercentage(retention1Users.length, days1AgoUsers.length)}%`;
-    elements.users7DaysAdded0Label.innerHTML = `${retention7Users.length} / ${days7AgoUsers.length} = ${getPercentage(retention7Users.length, days7AgoUsers.length)}%`;
-    elements.users30DaysAdded0Label.innerHTML = `${retention30Users.length} / ${days30AgoUsers.length} = ${getPercentage(retention30Users.length, days30AgoUsers.length)}%`;
-
-	elements.usersTenVoicedLabel.innerHTML = voicedTenUsers.length;
-	elements.usersVoicedLabel.innerHTML = `${voicedUsers.length} / ${artcilesAddedUsers.length} = ${getPercentage(voicedUsers.length, artcilesAddedUsers.length)}% (${voicedUsers.length} / ${users.length} = ${getPercentage(voicedUsers.length, users.length)}%)`;
-	elements.usersAddedArticlesLabel.innerHTML = `${artcilesAddedUsers.length} / ${users.length} = ${getPercentage(artcilesAddedUsers.length, users.length)}%`;
-	elements.usersTenArticlesLabel.innerHTML = articlesTenUsers.length;
-
-    elements.progressBar.close();
+	elements.users1DayAdded0Label.innerHTML = getPercentLabel(retention1Added0Users, days1AgoAdded0Users);
+	elements.users7DaysAdded0Label.innerHTML = getPercentLabel(retention7Added0Users, days7AgoAdded0Users);
+	elements.users30DaysAdded0Label.innerHTML = getPercentLabel(retention30Added0Users, days30AgoAdded0Users);
 };
 
 const populateUsersValues = allUsers => {
@@ -110,11 +130,11 @@ const populateUsersValues = allUsers => {
     const gmailUsers = users.filter(user => !!user.googleId);
 
     elements.usersVotedLabel.innerHTML = `${votedUsers.length} / ${users.length} = ${getPercentage(votedUsers.length, users.length)}%`;
-    elements.usersPositiveLabel.innerHTML = `${positiveUsers.length} / ${votedUsers.length} = ${getPercentage(positiveUsers.length, votedUsers.length)}%`;
-    elements.usersNegativeLabel.innerHTML = `${negativeUsers.length} / ${votedUsers.length} = ${getPercentage(negativeUsers.length, votedUsers.length)}%`;
+    elements.usersPositiveLabel.innerHTML = getPercentLabel(positiveUsers, votedUsers);
+    elements.usersNegativeLabel.innerHTML = getPercentLabel(negativeUsers, votedUsers);
 
-    elements.usersFbLabel.innerHTML = `${fbUsers.length} / ${users.length}`;
-    elements.usersGmailLabel.innerHTML = `${gmailUsers.length} / ${users.length}`;
+    elements.usersFbLabel.innerHTML = getPercentage(fbUsers, users);
+    elements.usersGmailLabel.innerHTML = getPercentage(gmailUsers, users);
 
     elements.progressBar.close();
 };
