@@ -2,6 +2,7 @@ import 'normalize.css/normalize.css';
 import './styles/index.scss';
 
 import {MDCRipple} from '@material/ripple';
+import {MDCLinearProgress} from '@material/linear-progress';
 
 const apiBaseURL = 'https://us-central1-voiceservice-217021.cloudfunctions.net';
 
@@ -9,6 +10,7 @@ let elements = {};
 
 const setupComponents = () => {
     elements = {
+        progressBar: new MDCLinearProgress(document.querySelector('.mdc-linear-progress')),
         getDataButton: document.querySelector('.get-stats-data'),
         getUsersDataButton: document.querySelector('.get-users-data'),
         usersAmountLabel: document.querySelector('.users-amount'),
@@ -29,6 +31,8 @@ const setupComponents = () => {
 
     new MDCRipple(elements.getDataButton);
     new MDCRipple(elements.getUsersDataButton);
+
+    elements.determinate = false;
 };
 
 const notUsers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 25, 34, 37, 40, 43, 65];
@@ -69,6 +73,8 @@ const populateStatsValues = allUsers => {
 	elements.usersVoicedLabel.innerHTML = `${voicedUsers.length} / ${artcilesAddedUsers.length} = ${getPercentage(voicedUsers.length, artcilesAddedUsers.length)}% (${voicedUsers.length} / ${users.length} = ${getPercentage(voicedUsers.length, users.length)}%)`;
 	elements.usersAddedArticlesLabel.innerHTML = `${artcilesAddedUsers.length} / ${users.length} = ${getPercentage(artcilesAddedUsers.length, users.length)}%`;
 	elements.usersTenArticlesLabel.innerHTML = articlesTenUsers.length;
+
+    elements.progressBar.close();
 };
 
 const populateUsersValues = allUsers => {
@@ -87,17 +93,26 @@ const populateUsersValues = allUsers => {
 
     elements.usersFbLabel.innerHTML = `${fbUsers.length} / ${users.length}`;
     elements.usersGmailLabel.innerHTML = `${gmailUsers.length} / ${users.length}`;
+
+    elements.progressBar.close();
 };
 
-const showError = () => console.log('Sorry, request failed');
+const showError = () => {
+    elements.progressBar.close();
+    console.log('Sorry, request failed')
+};
 
 const onGetDataClicked = () => {
-	fetchData()
+    elements.progressBar.open();
+
+    fetchData()
 		.then(populateStatsValues)
 		.catch(showError);
 };
 
 const onGetUsersDataClicked = () => {
+    elements.progressBar.open();
+
     fetchUsers()
         .then(populateUsersValues)
         .catch(showError);
