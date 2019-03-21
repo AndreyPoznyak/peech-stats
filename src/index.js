@@ -7,9 +7,9 @@ import {MDCLinearProgress} from '@material/linear-progress';
 const apiBaseURL = 'https://us-central1-voiceservice-217021.cloudfunctions.net';
 
 const today = new Date();
-const days30Ago = today.setDate(today.getDate() - 30);
-const days7Ago = today.setDate(today.getDate() - 7);
-const days1Ago = today.setDate(today.getDate() - 1);
+const days30Ago = new Date().setDate(today.getDate() - 30);
+const days7Ago = new Date().setDate(today.getDate() - 7);
+const days1Ago = new Date().setDate(today.getDate() - 1);
 const msPerDay = 1000 * 60 * 60 * 24;
 
 let elements = {};
@@ -88,8 +88,8 @@ const populateStatsValues = allUsers => {
 };
 
 const populateRetention = users => {
-	const added0Users = users.filter(user => new Date(user.registrationDate).getTime() - new Date(user.firstAddedArticleDate).getTime() < msPerDay);
-	const voiced0Users = users.filter(user => new Date(user.registrationDate).getTime() - new Date(user.firstVoicedArticleDate).getTime() < msPerDay);
+	const added0Users = users.filter(user => new Date(user.registrationDate).getTime() - new Date(user.firstAddedArticleDate).getTime() <= msPerDay);
+	const voiced0Users = users.filter(user => new Date(user.registrationDate).getTime() - new Date(user.firstVoicedArticleDate).getTime() <= msPerDay);
 
 	const days1AgoUsers = users.filter(user => new Date(user.registrationDate).getTime() <= days1Ago);
 	const days7AgoUsers = users.filter(user => new Date(user.registrationDate).getTime() <= days7Ago);
@@ -99,13 +99,13 @@ const populateRetention = users => {
 	const days7AgoAdded0Users = added0Users.filter(user => new Date(user.registrationDate).getTime() <= days7Ago);
 	const days30AgoAdded0Users = added0Users.filter(user => new Date(user.registrationDate).getTime() <= days30Ago);
 
-	const retention1Users = days1AgoUsers.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 1);
-	const retention7Users = days7AgoUsers.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 7);
-	const retention30Users = days30AgoUsers.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 30);
+	const retention1Users = days1AgoUsers.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 0);
+	const retention7Users = days7AgoUsers.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 6);
+	const retention30Users = days30AgoUsers.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 29);
 
-	const retention1Added0Users = days1AgoAdded0Users.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 1);
-	const retention7Added0Users = days7AgoAdded0Users.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 7);
-	const retention30Added0Users = days30AgoAdded0Users.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 30);
+	const retention1Added0Users = days1AgoAdded0Users.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 0);
+	const retention7Added0Users = days7AgoAdded0Users.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 6);
+	const retention30Added0Users = days30AgoAdded0Users.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 29);
 
 	elements.usersAddedStraightAmountLabel.innerHTML = added0Users.length;
 	elements.usersVoicedStraightAmountLabel.innerHTML = voiced0Users.length;
