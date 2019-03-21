@@ -95,7 +95,7 @@ module.exports = {
             // favicon background color (see https://github.com/haydenbleasel/favicons#usage)
             background: '#fff',
             // favicon app title (see https://github.com/haydenbleasel/favicons#usage)
-            title: 'zip-validation}}',
+            title: 'Peech Stats',
 
             // which icons should be generated (see https://github.com/haydenbleasel/favicons#usage)
             icons: {

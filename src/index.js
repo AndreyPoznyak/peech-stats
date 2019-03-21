@@ -129,12 +129,12 @@ const populateUsersValues = allUsers => {
     const fbUsers = users.filter(user => !!user.facebookId);
     const gmailUsers = users.filter(user => !!user.googleId);
 
-    elements.usersVotedLabel.innerHTML = `${votedUsers.length} / ${users.length} = ${getPercentage(votedUsers.length, users.length)}%`;
+    elements.usersVotedLabel.innerHTML = getPercentLabel(votedUsers, users);
     elements.usersPositiveLabel.innerHTML = getPercentLabel(positiveUsers, votedUsers);
     elements.usersNegativeLabel.innerHTML = getPercentLabel(negativeUsers, votedUsers);
 
-    elements.usersFbLabel.innerHTML = getPercentage(fbUsers, users);
-    elements.usersGmailLabel.innerHTML = getPercentage(gmailUsers, users);
+    elements.usersFbLabel.innerHTML = getPercentLabel(fbUsers, users);
+    elements.usersGmailLabel.innerHTML = getPercentLabel(gmailUsers, users);
 
     elements.progressBar.close();
 };
