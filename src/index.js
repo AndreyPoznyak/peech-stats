@@ -33,6 +33,10 @@ const setupComponents = () => {
         users7DaysAdded0Label: document.querySelector('.users-retention-seven-add-one-amount'),
         users30DaysAdded0Label: document.querySelector('.users-retention-thirty-add-one-amount'),
 
+        users1DayVoiced0Label: document.querySelector('.users-retention-one-voiced-one-amount'),
+        users7DaysVoiced0Label: document.querySelector('.users-retention-seven-voiced-one-amount'),
+        users30DaysVoiced0Label: document.querySelector('.users-retention-thirty-voiced-one-amount'),
+
         usersActiveLabel: document.querySelector('.users-active-amount'),
         usersTenVoicedLabel: document.querySelector('.users-ten-voiced-amount'),
         usersTenArticlesLabel: document.querySelector('.users-ten-articles-amount'),
@@ -63,10 +67,12 @@ const fetchUsers = () => fetch(`${apiBaseURL}/users`).then(response => response.
 const getPercentage = (part, amount) => Math.round(100 * (part / amount));
 const getPercentLabel = (partList, fullList) => `${partList.length} / ${fullList.length} = ${getPercentage(partList.length, fullList.length)}%`;
 
+const getMsTime = date => new Date(date).getTime();
+
 const populateStatsValues = allUsers => {
 	const users = filterNotRealUsers(allUsers);
 
-	const activeUsers = users.filter(user => new Date(user.lastAddedArticleDate).getTime() > days30Ago);
+	const activeUsers = users.filter(user => getMsTime(user.lastAddedArticleDate) > days30Ago);
 
 	const voicedUsers = users.filter(user => user.voicedArticlesCount > 0);
 	const voicedTenUsers = users.filter(user => user.voicedArticlesCount > 9);
@@ -88,24 +94,32 @@ const populateStatsValues = allUsers => {
 };
 
 const populateRetention = users => {
-	const added0Users = users.filter(user => new Date(user.registrationDate).getTime() - new Date(user.firstAddedArticleDate).getTime() <= msPerDay);
-	const voiced0Users = users.filter(user => new Date(user.registrationDate).getTime() - new Date(user.firstVoicedArticleDate).getTime() <= msPerDay);
+	const added0Users = users.filter(user => getMsTime(user.registrationDate) - getMsTime(user.firstAddedArticleDate) <= msPerDay);
+	const voiced0Users = users.filter(user => getMsTime(user.registrationDate) - getMsTime(user.firstVoicedArticleDate) <= msPerDay);
 
-	const days1AgoUsers = users.filter(user => new Date(user.registrationDate).getTime() <= days1Ago);
-	const days7AgoUsers = users.filter(user => new Date(user.registrationDate).getTime() <= days7Ago);
-	const days30AgoUsers = users.filter(user => new Date(user.registrationDate).getTime() <= days30Ago);
+	const days1AgoUsers = users.filter(user => getMsTime(user.registrationDate) <= days1Ago);
+	const days7AgoUsers = users.filter(user => getMsTime(user.registrationDate) <= days7Ago);
+	const days30AgoUsers = users.filter(user => getMsTime(user.registrationDate) <= days30Ago);
 
-	const days1AgoAdded0Users = added0Users.filter(user => new Date(user.registrationDate).getTime() <= days1Ago);
-	const days7AgoAdded0Users = added0Users.filter(user => new Date(user.registrationDate).getTime() <= days7Ago);
-	const days30AgoAdded0Users = added0Users.filter(user => new Date(user.registrationDate).getTime() <= days30Ago);
+	const days1AgoAdded0Users = added0Users.filter(user => getMsTime(user.registrationDate) <= days1Ago);
+	const days7AgoAdded0Users = added0Users.filter(user => getMsTime(user.registrationDate) <= days7Ago);
+	const days30AgoAdded0Users = added0Users.filter(user => getMsTime(user.registrationDate) <= days30Ago);
 
-	const retention1Users = days1AgoUsers.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 0);
-	const retention7Users = days7AgoUsers.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 6);
-	const retention30Users = days30AgoUsers.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 29);
+    const days1AgoVoiced0Users = voiced0Users.filter(user => getMsTime(user.registrationDate) <= days1Ago);
+    const days7AgoVoiced0Users = voiced0Users.filter(user => getMsTime(user.registrationDate) <= days7Ago);
+    const days30AgoVoiced0Users = voiced0Users.filter(user => getMsTime(user.registrationDate) <= days30Ago);
 
-	const retention1Added0Users = days1AgoAdded0Users.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 0);
-	const retention7Added0Users = days7AgoAdded0Users.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 6);
-	const retention30Added0Users = days30AgoAdded0Users.filter(user => ( new Date(user.lastAddedArticleDate).getTime() - new Date(user.registrationDate).getTime()) / msPerDay > 29);
+	const retention1Users = days1AgoUsers.filter(user => ( getMsTime(user.lastAddedArticleDate) - getMsTime(user.registrationDate)) / msPerDay > 0);
+	const retention7Users = days7AgoUsers.filter(user => ( getMsTime(user.lastAddedArticleDate) - getMsTime(user.registrationDate)) / msPerDay > 6);
+	const retention30Users = days30AgoUsers.filter(user => ( getMsTime(user.lastAddedArticleDate) - getMsTime(user.registrationDate)) / msPerDay > 29);
+
+	const retention1Added0Users = days1AgoAdded0Users.filter(user => (getMsTime(user.lastAddedArticleDate) - getMsTime(user.registrationDate)) / msPerDay > 0);
+	const retention7Added0Users = days7AgoAdded0Users.filter(user => (getMsTime(user.lastAddedArticleDate) - getMsTime(user.registrationDate)) / msPerDay > 6);
+	const retention30Added0Users = days30AgoAdded0Users.filter(user => (getMsTime(user.lastAddedArticleDate) - getMsTime(user.registrationDate)) / msPerDay > 29);
+
+    const retention1Voiced0Users = days1AgoVoiced0Users.filter(user => (getMsTime(user.lastVoicedArticleDate) - getMsTime(user.registrationDate)) / msPerDay > 0);
+    const retention7Voiced0Users = days7AgoVoiced0Users.filter(user => (getMsTime(user.lastVoicedArticleDate) - getMsTime(user.registrationDate)) / msPerDay > 6);
+    const retention30Voiced0Users = days30AgoVoiced0Users.filter(user => (getMsTime(user.lastVoicedArticleDate) - getMsTime(user.registrationDate)) / msPerDay > 29);
 
 	elements.usersAddedStraightAmountLabel.innerHTML = added0Users.length;
 	elements.usersVoicedStraightAmountLabel.innerHTML = voiced0Users.length;
@@ -117,6 +131,10 @@ const populateRetention = users => {
 	elements.users1DayAdded0Label.innerHTML = getPercentLabel(retention1Added0Users, days1AgoAdded0Users);
 	elements.users7DaysAdded0Label.innerHTML = getPercentLabel(retention7Added0Users, days7AgoAdded0Users);
 	elements.users30DaysAdded0Label.innerHTML = getPercentLabel(retention30Added0Users, days30AgoAdded0Users);
+
+    elements.users1DayVoiced0Label.innerHTML = getPercentLabel(retention1Voiced0Users, days1AgoVoiced0Users);
+    elements.users7DaysVoiced0Label.innerHTML = getPercentLabel(retention7Voiced0Users, days7AgoVoiced0Users);
+    elements.users30DaysVoiced0Label.innerHTML = getPercentLabel(retention30Voiced0Users, days30AgoVoiced0Users);
 };
 
 const populateUsersValues = allUsers => {
@@ -149,7 +167,7 @@ const onGetDataClicked = () => {
 
     fetchData()
 		.then(populateStatsValues)
-		.catch(showError);
+		//.catch(showError);
 };
 
 const onGetUsersDataClicked = () => {
