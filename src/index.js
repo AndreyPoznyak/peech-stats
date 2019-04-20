@@ -19,7 +19,8 @@ let elements = {};
 const pickerOptions = {
     orientation: 'portrait',
     weekBegin: 'monday',
-    color: '#6200ee'
+    color: '#6200ee',
+    outputFormat: 'DD/MM/YYYY'
 };
 
 const setupComponents = () => {
