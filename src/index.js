@@ -16,6 +16,9 @@ const msPerDay = 1000 * 60 * 60 * 24;
 
 let elements = {};
 
+let fromDate;
+let toDate;
+
 const pickerOptions = {
     orientation: 'portrait',
     weekBegin: 'monday',
@@ -69,7 +72,7 @@ const setupComponents = () => {
     new MaterialDatepicker('#datepicker2', pickerOptions);
 };
 
-const notUsers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 25, 34, 37, 40, 43, 65];
+const notUsers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 25, 34, 37, 40, 43, 65, 257, 177, 166];
 
 const filterNotRealUsers = users => users.filter(user => !notUsers.includes(user.userId || user.id));
 
