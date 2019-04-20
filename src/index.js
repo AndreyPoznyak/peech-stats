@@ -1,6 +1,8 @@
 import 'normalize.css/normalize.css';
 import './styles/index.scss';
 
+//import 'moment'
+
 import {MDCRipple} from '@material/ripple';
 import {MDCLinearProgress} from '@material/linear-progress';
 
@@ -13,6 +15,12 @@ const days1Ago = new Date().setDate(today.getDate() - 1);
 const msPerDay = 1000 * 60 * 60 * 24;
 
 let elements = {};
+
+const pickerOptions = {
+    orientation: 'portrait',
+    weekBegin: 'monday',
+    color: '#6200ee'
+};
 
 const setupComponents = () => {
     elements = {
@@ -55,6 +63,9 @@ const setupComponents = () => {
 
     elements.progressBar.determinate = false;
 	elements.progressBar.close();
+
+    new MaterialDatepicker('#datepicker1', pickerOptions);
+    new MaterialDatepicker('#datepicker2', pickerOptions);
 };
 
 const notUsers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 25, 34, 37, 40, 43, 65];

@@ -11,6 +11,8 @@
     <!-- Mobile header color for iOS Safari (supports black, black-translucent or default) -->
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet">
+    <script type="text/javascript" src="https://momentjs.com/downloads/moment-with-locales.min.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/FreddyFY/material-datepicker/1.0.6/dist/material-datepicker.min.js"></script>
 </head>
 <body>
 <div role="progressbar" class="mdc-linear-progress">
@@ -28,6 +30,10 @@
 </section>
 
 <section>
+    <div class="button-container">
+        <input type="text" id="datepicker1">
+        <input type="text" id="datepicker2">
+    </div>
     <div class="button-container">
         <button type="button" class="mdc-button mdc-button--raised get-stats-data">
             Get data

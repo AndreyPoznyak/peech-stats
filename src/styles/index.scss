@@ -1,6 +1,7 @@
 @import "@material/button/mdc-button";
 @import "@material/dialog/mdc-dialog";
 @import "@material/linear-progress/mdc-linear-progress";
+@import "../../libs/material-datepicker.css";
 
 html, body {
   width: 100%;
@@ -31,24 +32,27 @@ section {
 
 .button-container {
   display: flex;
-  //justify-content: flex-end;
+  width: 90%;
+  margin: 10px auto;
+
+  input {
+    margin: 3px 20px 3px 3px;
+  }
+
+  button {
+    margin: 3px;
+  }
+}
+
+.info-container {
   width: 90%;
   margin: auto;
-}
 
-.button-container, .info-container {
-  width: 90%;
-  margin: auto;
-}
+  p {
+    text-align: left;
+  }
 
-.info-container p {
-  text-align: left;
-}
-
-.info-container span {
-  font-weight: bold;
-}
-
-.button-container button {
-  margin: 3px;
+  span {
+    font-weight: bold;
+  }
 }
