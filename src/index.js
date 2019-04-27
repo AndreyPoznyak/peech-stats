@@ -16,6 +16,9 @@ const msPerDay = 1000 * 60 * 60 * 24;
 
 let elements = {};
 
+let globalUsers;
+let globalUsersData;
+
 let fromDate;
 let toDate;
 
@@ -24,6 +27,36 @@ const pickerOptions = {
     weekBegin: 'monday',
     color: '#6200ee',
     outputFormat: 'DD/MM/YYYY'
+};
+
+const setupDatePickers = () => {
+    const fromDatePicker = new MaterialDatepicker('#datepicker1', {
+        ...pickerOptions,
+        date: new Date('2018-09-24T00:00:00'),
+        onNewDate: date => {
+            if (fromDate !== date) {
+                fromDate = date;
+            }
+
+            if (globalUsers) {
+                populateUsersValues();
+            }
+            if (globalUsersData) {
+                populateStatsValues();
+            }
+        }
+    });
+    const toDatePicker = new MaterialDatepicker('#datepicker2', {
+        ...pickerOptions,
+        onNewDate: date => {
+            if (toDate !== date) {
+                toDate = date;
+            }
+        }
+    });
+
+    fromDate = fromDatePicker.date;
+    toDate = toDatePicker.date;
 };
 
 const setupComponents = () => {
@@ -68,13 +101,20 @@ const setupComponents = () => {
     elements.progressBar.determinate = false;
 	elements.progressBar.close();
 
-    new MaterialDatepicker('#datepicker1', pickerOptions);
-    new MaterialDatepicker('#datepicker2', pickerOptions);
+	setupDatePickers();
 };
 
 const notUsers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 25, 34, 37, 40, 43, 65, 257, 177, 166];
 
 const filterNotRealUsers = users => users.filter(user => !notUsers.includes(user.userId || user.id));
+
+const filterUsersByDates = users => {
+    return users.filter(user => {
+        const regDate = getMsTime(user.registrationDate || user.createdAt);
+
+        return regDate >= getMsTime(fromDate) && regDate <= getMsTime(toDate);
+    });
+};
 
 const fetchData = () => fetch(`${apiBaseURL}/stats`).then(response => response.json());
 const fetchUsers = () => fetch(`${apiBaseURL}/users`).then(response => response.json());
@@ -84,8 +124,8 @@ const getPercentLabel = (partList, fullList) => `${partList.length} / ${fullList
 
 const getMsTime = date => new Date(date).getTime();
 
-const populateStatsValues = allUsers => {
-	const users = filterNotRealUsers(allUsers);
+const populateStatsValues = () => {
+	const users = filterNotRealUsers(filterUsersByDates(globalUsersData));
 
 	const activeUsers = users.filter(user => getMsTime(user.lastAddedArticleDate) > days30Ago);
 
@@ -104,8 +144,6 @@ const populateStatsValues = allUsers => {
 	elements.usersTenVoicedLabel.innerHTML = voicedTenUsers.length;
 
 	populateRetention(users);
-
-    elements.progressBar.close();
 };
 
 const populateRetention = users => {
@@ -152,8 +190,8 @@ const populateRetention = users => {
     elements.users30DaysVoiced0Label.innerHTML = getPercentLabel(retention30Voiced0Users, days30AgoVoiced0Users);
 };
 
-const populateUsersValues = allUsers => {
-    const users = filterNotRealUsers(allUsers);
+const populateUsersValues = () => {
+    const users = filterNotRealUsers(filterUsersByDates(globalUsers));
 
     const positiveUsers = users.filter(user => user.offerFirstStep > user.offerSecondStep);
     const negativeUsers = users.filter(user => user.offerSecondStep > user.offerFirstStep);
@@ -168,27 +206,33 @@ const populateUsersValues = allUsers => {
 
     elements.usersFbLabel.innerHTML = getPercentLabel(fbUsers, users);
     elements.usersGmailLabel.innerHTML = getPercentLabel(gmailUsers, users);
-
-    elements.progressBar.close();
 };
 
 const showError = () => {
     elements.progressBar.close();
-    console.log('Sorry, request failed')
+    console.log('Sorry, smth failed')
 };
 
 const onGetDataClicked = () => {
     elements.progressBar.open();
 
     fetchData()
+        .then(allUsers => {
+            elements.progressBar.close();
+            globalUsersData = allUsers;
+        })
 		.then(populateStatsValues)
-		//.catch(showError);
+		.catch(showError);
 };
 
 const onGetUsersDataClicked = () => {
     elements.progressBar.open();
 
     fetchUsers()
+        .then(allUsers => {
+            elements.progressBar.close();
+            globalUsers = allUsers;
+        })
         .then(populateUsersValues)
         .catch(showError);
 };
