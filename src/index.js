@@ -30,6 +30,9 @@ const pickerOptions = {
 };
 
 const setupDatePickers = () => {
+    const endOfToday = new Date();
+    endOfToday.setHours(23,59,59,999);
+
     const fromDatePicker = new MaterialDatepicker('#datepicker1', {
         ...pickerOptions,
         date: new Date('2018-09-24T00:00:00'),
@@ -48,9 +51,17 @@ const setupDatePickers = () => {
     });
     const toDatePicker = new MaterialDatepicker('#datepicker2', {
         ...pickerOptions,
+        date: endOfToday,
         onNewDate: date => {
+            date.setHours(23,59,59,999);
             if (toDate !== date) {
                 toDate = date;
+            }
+            if (globalUsers) {
+                populateUsersValues();
+            }
+            if (globalUsersData) {
+                populateStatsValues();
             }
         }
     });
